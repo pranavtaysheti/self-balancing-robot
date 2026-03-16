@@ -14,9 +14,8 @@ int setup_IMU() {
   return !imu.testConnection();
 }
 
-int read_IMU(IMUData *data) {
+void read_IMU(IMUData *data) {
   imu.getMotion6(&data->ax, &data->ay, &data->az, &data->gx, &data->gy, &data->gz);
-
-  return 0;  
 }
 
+void translate();

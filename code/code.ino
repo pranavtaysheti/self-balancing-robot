@@ -1,5 +1,7 @@
 #include "motors.h"
 #include "IMU.h"
+#include "state.h"
+#include "kalman.h"
 
 void fatal_error(const char *msg) {
   Serial.println(msg);
@@ -17,6 +19,7 @@ void fatal_error(const char *msg) {
 
 void setup() {
   // put your setup code here, to run once:
+
   Serial.begin(9600);
 
   if (setup_motors({9,10,11}, {14,15,16}, 2)) {
@@ -36,4 +39,8 @@ void loop() {
   struct IMUData data;
   read_IMU(&data);
 
+  struct StateData state;
+  translate_IMU(&data, &state);
+
+  float angle = filter(state.gyro_ang_vel, state.acc_angle);
 }

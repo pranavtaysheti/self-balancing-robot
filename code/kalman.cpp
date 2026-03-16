@@ -13,17 +13,17 @@ const float Q_ANGLE = 0.001;
 const float Q_BIAS = 0.003;
 const float R_ANGLE = 0.03;
 
-float filter(float gyro_angVel, float acc_angle) {
+float filter(float gyro_ang_vel, float acc_angle) {
   // Initialize State
   static float angle = 0;
   static float bias = 0;
   static float P[2][2] = {{1,0}, {0,1}};
 
   // Step 0: Sanitize data from gyro
-  float angVel = gyro_angVel - bias;
+  float angVel = gyro_ang_vel - bias;
 
   // Step 1: Project the state ahead
-  float prj_angle = angle + angVel*DT_S;
+  float prj_angle = angle + gyro_ang_vel*DT_S;
   float prj_bias = bias; //bias is assumed to be static.
 
   // Step 2: Update state covariance:

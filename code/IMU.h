@@ -14,6 +14,6 @@ struct IMUData {
 };
 
 int setup_IMU();
-int read_IMU(IMUData *data);
+void read_IMU(IMUData *data);
 
 #endif
