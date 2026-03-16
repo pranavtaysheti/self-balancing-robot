@@ -1,6 +1,6 @@
-#include <Arduino.h>
 #include "motors.h"
 
+#include <Arduino.h>
 
 pin_size_t m_stby;
 struct m_MotorConfig m_motorConfig[2];
@@ -24,7 +24,15 @@ int setup_motors(struct m_MotorConfig m0, struct m_MotorConfig m1, pin_size_t st
   return 0;
 }
 
-int move_motors(int motor, Direction dir, char speed) {
+void enable_motors() {
+  digitalWrite(m_stby, HIGH);
+}
+
+void disable_motors() {
+  digitalWrite(m_stby, LOW);
+}
+
+int move_motors(int motor, Direction dir, uint8_t speed) {
   // Assumes that setup_motor() function has been run in setup() part.
   // This should go in loop().
 

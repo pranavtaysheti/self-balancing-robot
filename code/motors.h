@@ -1,5 +1,8 @@
-#ifndef MOTORS_H
-#define MOTORS_H
+#ifndef _MOTORS_H
+#define _MOTORS_H
+
+#include <Arduino.h>
+#include <stdint.h>
 
 enum Direction {
   md_ClockWise,
@@ -13,6 +16,8 @@ struct m_MotorConfig {
 };
 
 int setup_motors(struct m_MotorConfig m0, struct m_MotorConfig m1, pin_size_t stby);
-int move_motors(int motor, Direction dir, char speed);
+void enable_motors();
+void disable_motors();
+int move_motors(int motor, Direction dir, uint8_t speed);
 
 #endif

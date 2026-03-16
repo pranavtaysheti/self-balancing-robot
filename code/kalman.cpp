@@ -6,7 +6,7 @@
 
 #include "constants.h"
 
-float DT_S = DT/1000.0f;
+const float DT_S = DT/1000.0f;
 
 //TODO: Tune Values.
 const float Q_ANGLE = 0.001;
