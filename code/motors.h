@@ -4,10 +4,7 @@
 #include <Arduino.h>
 #include <stdint.h>
 
-enum Direction {
-  md_ClockWise,
-  md_CounterClockWise,
-};
+#include "common.h"
 
 struct m_MotorConfig {
   pin_size_t dir1;

@@ -4,7 +4,7 @@
 
 #include "kalman.h"
 
-#include "constants.h"
+#include "common.h"
 
 const float DT_S = DT/1000.0f;
 

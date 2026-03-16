@@ -2,6 +2,7 @@
 #include "IMU.h"
 #include "state.h"
 #include "kalman.h"
+#include "PD.h"
 
 void fatal_error(const char *msg) {
   Serial.println(msg);
@@ -43,4 +44,7 @@ void loop() {
   translate_IMU(&data, &state);
 
   float angle = filter(state.gyro_ang_vel, state.acc_angle);
+  float u = calculate(angle, state.gyro_ang_vel);
+  move_motors(0, dir_motor(u), speed_motor(u));
+  move_motors(1, dir_motor(-u), speed_motor(u));
 }

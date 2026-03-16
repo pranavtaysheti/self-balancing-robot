@@ -1,7 +1,5 @@
 #include "motors.h"
 
-#include <Arduino.h>
-
 pin_size_t m_stby;
 struct m_MotorConfig m_motorConfig[2];
 

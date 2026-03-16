@@ -4,4 +4,9 @@
 // time interval between each loop in ms.
 #define DT 2
 
+enum Direction {
+  md_ClockWise,
+  md_CounterClockWise,
+};
+
 #endif
