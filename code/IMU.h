@@ -4,13 +4,13 @@
 #include <stdint.h>
 
 struct IMUData {
-  int16_t ax;
-  int16_t ay;
-  int16_t az;
+  float ax;
+  float ay;
+  float az;
 
-  int16_t gx;
-  int16_t gy;
-  int16_t gz;
+  float gx;
+  float gy;
+  float gz;
 };
 
 int setup_IMU();

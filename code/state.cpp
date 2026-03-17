@@ -1,9 +1,8 @@
 #include "state.h"
 
-#include <stdint.h>
 #include <math.h>
 
-#include "constants.h"
+#include "common.h"
 
 // You may have to change the axis or sign below based on how your IMU is oriented.
 #define ACC_VER az
