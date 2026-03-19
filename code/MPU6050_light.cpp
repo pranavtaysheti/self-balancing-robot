@@ -175,7 +175,7 @@ void MPU6050::fetchData(){
   int16_t rawData[7]; // [ax,ay,az,temp,gx,gy,gz]
 
   for(int i=0;i<7;i++){
-	rawData[i]  = wire->read() << 8;
+	  rawData[i]  = wire->read() << 8;
     rawData[i] |= wire->read();
   }
 
