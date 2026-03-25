@@ -10,6 +10,9 @@
 #define LOOPS 1000 
 #define STARTUP_TIME 3000
 
+// TODO: Make LED blinking non blocking.
+bool calibrated false;
+
 void fatal_error(const char *msg) {
   Serial.println(msg);
   disable_motors();
@@ -93,6 +96,12 @@ void loop() {
   #endif
 
   #if MODE==0
+  
+  // TODO: Calibrate the gyros if not yet calibrated
+  if (!calibrated) {
+
+  }
+
   acc_angle 
   float angle = filter(state.gyro_ang_vel, state.acc_angle);
   float u = calculate(angle, state.gyro_ang_vel);
