@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"clangd.arguments": [
+			"--compile-commands-dir=.",
+			"--query-driver=/home/pranavtaysheti/.arduino15/packages/rp2040/tools/pqt-gcc/**/arm-none-eabi-g*"
+		]
+	}
+}

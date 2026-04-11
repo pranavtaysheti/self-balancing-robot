@@ -1,12 +1,12 @@
 #include <Wire.h>
 #include <float.h>
 
-#include "motors.h"
 #include "IMU.h"
-#include "kalman.h"
-#include "PD.h"
 #include "LED.h"
+#include "PD.h"
 #include "config.h"
+#include "kalman.h"
+#include "motors.h"
 #include "state.h"
 
 // 1 == Calibration, 0 == Normal Operation
@@ -15,7 +15,6 @@
 void fatal_error(const char *msg) {
   Serial.println(msg);
   disable_motors();
-
   while (true) {
     digitalWrite(LED_BUILTIN, HIGH);
     delay(200);
@@ -29,16 +28,15 @@ void setup() {
 
   // Set the state
   globalState = S_WAITING_CALIBRATION;
-
   // Setup LED Pin as debug pin
   pinMode(LED_BUILTIN, OUTPUT);
-  
+
   // Initialize Serial
   Serial.begin(115200);
 
   // Initialize I2C
   Wire.begin();
-  Wire.setClock(400*1000);
+  Wire.setClock(400 * 1000);
 
   // Initialize IMU at default SPI ports
   if (setup_IMU()) {
@@ -50,13 +48,13 @@ void setup() {
     fatal_error("Failed to setup motors.");
   }
 
-  #if MODE==0
+#if MODE == 0
   enable_motors();
-  #endif
-  
-  #if MODE==1
+#endif
+
+#if MODE == 1
   disable_motors();
-  #endif
+#endif
 
   // Wait for IMU to stabilize
   delay(STARTUP_TIME);
@@ -70,22 +68,23 @@ void loop() {
 
   // Wait for 2ms to pass from last run.
   static unsigned long last = 0;
-  if (micros() - last < DT*1000) {
+  if (micros() - last < DT * 1000) {
     return;
   }
 
   last += 2000;
 
-  // Calibration Mode
-  #if MODE==1
+// Calibration Mode
+#if MODE == 1
   static int i = LOOPS;
 
   if (i < LOOPS) {
     struct IMURawData data;
     read_raw_IMU(&data);
 
-    Serial.printf("%f %f %f %f %f %f \n", data.ax, data.ay, data.az, data.gx, data.gy, data.gz);
-    
+    Serial.printf("%f %f %f %f %f %f \n", data.ax, data.ay, data.az, data.gx,
+                  data.gy, data.gz);
+
     i++;
     return
   }
@@ -98,33 +97,32 @@ void loop() {
         return;
       }
     }
-
   }
-  #endif
+#endif
 
-  // Normal Operation Mode
-  #if MODE==0
-  
+// Normal Operation Mode
+#if MODE == 0
+
   // Calibration Routine: Calibrate the gyros if not yet calibrated
   if (globalState == S_WAITING_CALIBRATION) {
     globalState = S_CALIBRATING;
 
-    // TODO: Gyro Calibrating Code
-    static IMUData buffer[100];
-    static curr = 0;
-    read_IMU(buffer[curr % 100]);
-    curr++;
-
-    if (curr >= 100) {
-      float x_high = FLT_MAX, x_low = -FLT_MAX;
-      float y_high = FLT_MAX, y_low = -FLT_MAX;
-      float z_high = FLT_MAX, z_low = -FLT_MAX;
-      
-      for (int i = 0; i < 100; i++) {
-
-      }
-    }
-    return;
+    // // TODO: Gyro Calibrating Code
+    // static IMUData buffer[100];
+    // static curr = 0;
+    // read_IMU(buffer[curr % 100]);
+    // curr++;
+    //
+    // if (curr >= 100) {
+    //   float x_high = FLT_MAX, x_low = -FLT_MAX;
+    //   float y_high = FLT_MAX, y_low = -FLT_MAX;
+    //   float z_high = FLT_MAX, z_low = -FLT_MAX;
+    //
+    //   for (int i = 0; i < 100; i++) {
+    //
+    //   }
+    // }
+    // return;
   }
 
   globalState = S_CALIBRATED;
@@ -138,5 +136,5 @@ void loop() {
 
   move_motors(M_LEFT, dir_motor(u), speed_motor(u));
   move_motors(M_RIGHT, dir_motor(-u), speed_motor(u));
-  #endif
+#endif
 }
