@@ -1,6 +1,6 @@
 #include "PD.h"
 
-#include <math.h>
+#include <stdlib.h>
 
 // TODO: Calibrate values for KP and KD. current values are placeholders.
 #define KP 10.0f
@@ -14,14 +14,14 @@ float calculate(float angle, float ang_vel) {
 
 enum Direction dir_motor(float u) {
   if (u > 0) {
-    return md_ClockWise;
+    return D_CLOCKWISE;
   }
 
-  return md_CounterClockWise;
+  return D_COUNTER_CLOCKWISE;
 }
 
 uint8_t speed_motor(float u) {
-  int v = abs(int(u));
+  int v = abs((int)u);
   if (v < THRESHOLD) {
     v = THRESHOLD;
   } else if (v > 255) {

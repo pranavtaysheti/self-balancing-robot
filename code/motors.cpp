@@ -30,7 +30,7 @@ void disable_motors() {
   digitalWrite(m_stby, LOW);
 }
 
-int move_motors(int motor, Direction dir, uint8_t speed) {
+int move_motors(enum Motor motor, enum Direction dir, uint8_t speed) {
   // Assumes that setup_motor() function has been run in setup() part.
   // This should go in loop().
 
@@ -38,12 +38,12 @@ int move_motors(int motor, Direction dir, uint8_t speed) {
   PinStatus dirStatusPin2;
   
   switch (dir) {
-    case md_ClockWise:
+    case D_CLOCKWISE:
       dirStatusPin1 = HIGH;
       dirStatusPin2 = LOW;
       break;
 
-    case md_CounterClockWise:
+    case D_COUNTER_CLOCKWISE:
       dirStatusPin1 = LOW;
       dirStatusPin2 = HIGH;
       break;

@@ -4,9 +4,8 @@
 
 #include "kalman.h"
 
-#include "common.h"
-
-const float DT_S = DT/1000.0f;
+#include <Arduino.h>
+#include "config.h"
 
 //TODO: Tune Values.
 const float Q_ANGLE = 0.001;
@@ -14,6 +13,12 @@ const float Q_BIAS = 0.003;
 const float R_ANGLE = 0.03;
 
 float filter(float gyro_ang_vel, float acc_angle) {
+  // Calculate DT
+  static unsigned long last = 0;
+  static unsigned long now = micros();
+  float dt = (now - last) / 1e6f;
+  last = now;
+
   // Initialize State
   static float angle = 0;
   static float bias = 0;
@@ -23,15 +28,15 @@ float filter(float gyro_ang_vel, float acc_angle) {
   float ang_vel = gyro_ang_vel - bias;
 
   // Step 1: Project the state ahead
-  float prj_angle = angle + ang_vel*DT_S;
+  float prj_angle = angle + ang_vel*dt;
   float prj_bias = bias; //bias is assumed to be static.
 
   // Step 2: Update state covariance:
   // Some time has passed since last estimation so variance should increase.
-  P[0][0] += DT_S*DT_S*P[1][1] - DT_S*P[1][0] - DT_S*P[0][1] + DT_S*Q_ANGLE;
-  P[0][1] -= P[1][1] * DT_S;
-  P[1][0] -= P[1][1] * DT_S;
-  P[1][1] += DT_S*Q_BIAS;
+  P[0][0] += dt*dt*P[1][1] - dt*P[1][0] - dt*P[0][1] + dt*Q_ANGLE;
+  P[0][1] -= P[1][1] * dt;
+  P[1][0] -= P[1][1] * dt;
+  P[1][1] += dt*Q_BIAS;
 
   // Step 3: calculate innovation (Delta between our prediction and measurement from accelerometer)
   float y_angle = acc_angle - prj_angle;

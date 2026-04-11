@@ -1,8 +1,6 @@
 #ifndef _IMU_H
 #define _IMU_H
 
-#include <stdint.h>
-
 struct IMUData {
   float acc_angle;
   float gyro_ang_vel;

@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-#include "common.h"
+#include "config.h"
 #include "MPU6050_light.h"
 
 MPU6050 mpu(Wire);
@@ -21,7 +21,7 @@ void read_IMU(IMUData *data) {
 }
 
 void read_raw_IMU(IMURawData *data) {
-  mpu.fetchData();
+  mpu.fetchData();  
   
   data->ax = mpu.getAccX();
   data->ay = mpu.getAccY();
