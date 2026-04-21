@@ -42,24 +42,25 @@ bool calibrate_gyro() {
   static int curr = 0;
 
   bool result = false;
-  int i = curr % 100;
 
-  read_raw_IMU(&buffer[i]);
-
-  float x_high = -FLT_MAX, x_low = +FLT_MAX;
-  float y_high = -FLT_MAX, y_low = +FLT_MAX;
-  float z_high = -FLT_MAX, z_low = +FLT_MAX;
-
-  x_high = fmaxf(x_high, buffer[i].gx);
-  x_low = fminf(x_low, buffer[i].gx);
-
-  y_high = fmaxf(y_high, buffer[i].gy);
-  y_low = fminf(y_low, buffer[i].gy);
-
-  z_high = fmaxf(z_high, buffer[i].gz);
-  z_low = fminf(z_low, buffer[i].gz);
+  read_raw_IMU(&buffer[curr % 100]);
 
   if (curr >= 100) {
+    float x_high = -FLT_MAX, x_low = +FLT_MAX;
+    float y_high = -FLT_MAX, y_low = +FLT_MAX;
+    float z_high = -FLT_MAX, z_low = +FLT_MAX;
+
+    for (int j = 0; j < 100; j++) {
+      x_high = fmaxf(x_high, buffer[j].gx);
+      x_low = fminf(x_low, buffer[j].gx);
+
+      y_high = fmaxf(y_high, buffer[j].gy);
+      y_low = fminf(y_low, buffer[j].gy);
+
+      z_high = fmaxf(z_high, buffer[j].gz);
+      z_low = fminf(z_low, buffer[j].gz);
+    }
+
     if (x_high - x_low < GYRO_DELTA && y_high - y_low < GYRO_DELTA &&
         z_high - z_low < GYRO_DELTA) {
       float x = (x_high + x_low) / 2;

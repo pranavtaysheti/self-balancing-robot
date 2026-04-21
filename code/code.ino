@@ -85,7 +85,7 @@ void loop() {
                   data.gy, data.gz);
 
     i++;
-    return
+    return;
   }
 
   if (i == LOOPS) {
