@@ -1,5 +1,4 @@
 #include <Wire.h>
-#include <float.h>
 
 #include "IMU.h"
 #include "LED.h"
@@ -102,30 +101,13 @@ void loop() {
 
 // Normal Operation Mode
 #if MODE == 0
-
   // Calibration Routine: Calibrate the gyros if not yet calibrated
-  if (globalState == S_WAITING_CALIBRATION) {
+  if (globalState == S_WAITING_CALIBRATION || globalState == S_CALIBRATING) {
     globalState = S_CALIBRATING;
-
-    // // TODO: Gyro Calibrating Code
-    // static IMUData buffer[100];
-    // static curr = 0;
-    // read_IMU(buffer[curr % 100]);
-    // curr++;
-    //
-    // if (curr >= 100) {
-    //   float x_high = FLT_MAX, x_low = -FLT_MAX;
-    //   float y_high = FLT_MAX, y_low = -FLT_MAX;
-    //   float z_high = FLT_MAX, z_low = -FLT_MAX;
-    //
-    //   for (int i = 0; i < 100; i++) {
-    //
-    //   }
-    // }
-    // return;
+    if (calibrate_gyro()) {
+      globalState = S_CALIBRATED;
+    }
   }
-
-  globalState = S_CALIBRATED;
 
   // Robot Balancing Routine
   static struct IMUData robotState;

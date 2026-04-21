@@ -1,5 +1,5 @@
-#ifndef _COMMON_H
-#define _COMMON_H
+#ifndef _DIRECTION_H
+#define _DIRECTION_H
 
 enum Direction {
   D_CLOCKWISE,

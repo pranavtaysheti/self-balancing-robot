@@ -19,4 +19,5 @@ struct IMURawData {
 int setup_IMU();
 void read_IMU(IMUData *data);
 void read_raw_IMU(IMURawData *data);
+bool calibrate_gyro();
 #endif

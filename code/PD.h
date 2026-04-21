@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "common.h"
+#include "direction.h"
 
 float calculate(float angle, float ang_vel);
 enum Direction dir_motor(float u);
