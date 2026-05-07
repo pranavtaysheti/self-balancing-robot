@@ -1,0 +1,15 @@
+﻿"Wood_Thickness"= 5.5mm
+"PCB_Width"= 100mm
+"PCB_Frame"= 4mm
+"PCB_Length"= 100mm
+"PCB_MountHole"= 3mm
+"Top_Slot_Width"= 12mm
+"Top_Slot_Distance"= 32mm
+"Floor_Height"= 100mm
+"Base_Length"= 48mm
+"Base_Slot_Width"= 12mm
+"Base_Width"= if("PCB_Width"+16mm < 150mm, 150mm, "PCB_Width"+16mm)
+"Top_Slot_Frame"= 4mm
+"Top_Slot_Gap"= "Top_Slot_Width" - 2 * "Top_Slot_Frame"
+"Top_Slot_Snap_Width"= 1.5mm
+"Top_Slot_Snap_Depth"= 1.5mm
