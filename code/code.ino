@@ -1,15 +1,23 @@
+#include <Arduino.h>
 #include <Wire.h>
 
 #include "IMU.h"
 #include "LED.h"
-#include "PD.h"
 #include "config.h"
-#include "kalman.h"
 #include "motors.h"
 #include "state.h"
 
 // 1 == Calibration, 0 == Normal Operation
 #define MODE 0
+
+#if MODE == 0
+#include "PD.h"
+#include "kalman.h"
+#endif
+
+#if MODE == 1
+#include "calibrate.h"
+#endif
 
 void fatal_error(const char *msg) {
   Serial.println(msg);
@@ -75,46 +83,37 @@ void loop() {
 
 // Calibration Mode
 #if MODE == 1
-  static int i = LOOPS;
-
-  if (i < LOOPS) {
-    struct IMURawData data;
-    read_raw_IMU(&data);
-
-    Serial.printf("%f %f %f %f %f %f \n", data.ax, data.ay, data.az, data.gx,
-                  data.gy, data.gz);
-
-    i++;
-    return;
-  }
-
-  if (i == LOOPS) {
-    if (Serial.available()) {
-      auto val = Serial.readStringUntil('\n');
-      if (val == "READY") {
-        i = 0;
-        return;
-      }
-    }
-  }
+  calibration_loop()
 #endif
 
 // Normal Operation Mode
 #if MODE == 0
-  // Calibration Routine: Calibrate the gyros if not yet calibrated
-  if (globalState == S_WAITING_CALIBRATION || globalState == S_CALIBRATING) {
+      // Calibration Routine: Calibrate the gyros if not yet calibrated
+      if (globalState == S_WAITING_CALIBRATION ||
+          globalState == S_CALIBRATING) {
     globalState = S_CALIBRATING;
+
     if (calibrate_gyro()) {
       globalState = S_CALIBRATED;
     }
   }
 
   // Robot Balancing Routine
+
+  // Get data from IMU
   static struct IMUData robotState;
   read_IMU(&robotState);
 
+  // Work with data
   float angle = filter(robotState.gyro_ang_vel, robotState.acc_angle);
   float u = calculate(angle, robotState.gyro_ang_vel);
+
+  // Move motors
+
+  // Do not move motors if robot is not almost upright
+  if (angle >= 10.0f || angle <= -10.0f) {
+    return;
+  }
 
   move_motors(M_LEFT, dir_motor(u), speed_motor(u));
   move_motors(M_RIGHT, dir_motor(-u), speed_motor(u));

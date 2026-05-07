@@ -1,13 +1,12 @@
-// Credits: 
+// Credits:
 // This code is based on famous TKJ Electronics' Kalman Library:
 // https://github.com/TKJElectronics/KalmanFilter
 
 #include "kalman.h"
 
 #include <Arduino.h>
-#include "config.h"
 
-//TODO: Tune Values.
+// TODO: Tune Values.
 const float Q_ANGLE = 0.001;
 const float Q_BIAS = 0.003;
 const float R_ANGLE = 0.03;
@@ -22,34 +21,35 @@ float filter(float gyro_ang_vel, float acc_angle) {
   // Initialize State
   static float angle = 0;
   static float bias = 0;
-  static float P[2][2] = {{1,0}, {0,1}};
+  static float P[2][2] = {{1, 0}, {0, 1}};
 
   // Step 0: Sanitize data from gyro
   float ang_vel = gyro_ang_vel - bias;
 
   // Step 1: Project the state ahead
-  float prj_angle = angle + ang_vel*dt;
-  float prj_bias = bias; //bias is assumed to be static.
+  float prj_angle = angle + ang_vel * dt;
+  float prj_bias = bias; // bias is assumed to be static.
 
   // Step 2: Update state covariance:
   // Some time has passed since last estimation so variance should increase.
-  P[0][0] += dt*dt*P[1][1] - dt*P[1][0] - dt*P[0][1] + dt*Q_ANGLE;
+  P[0][0] += dt * dt * P[1][1] - dt * P[1][0] - dt * P[0][1] + dt * Q_ANGLE;
   P[0][1] -= P[1][1] * dt;
   P[1][0] -= P[1][1] * dt;
-  P[1][1] += dt*Q_BIAS;
+  P[1][1] += dt * Q_BIAS;
 
-  // Step 3: calculate innovation (Delta between our prediction and measurement from accelerometer)
+  // Step 3: calculate innovation (Delta between our prediction and measurement
+  // from accelerometer)
   float y_angle = acc_angle - prj_angle;
 
-  // Step 4: Calculate Kalman Gain
+  // Step 4: calculate innovation co-variance
   float S = P[0][0] + R_ANGLE;
 
-  // Step 5:
+  // Step 5: calculate kalman gain
   float K[2];
-  K[0] = P[0][0]/S;
-  K[1] = P[1][0]/S;
+  K[0] = P[0][0] / S;
+  K[1] = P[1][0] / S;
 
-  // Step 6:
+  // Step 6: Update the state after getting measurement
   angle = prj_angle + K[0] * y_angle;
   bias = prj_bias + K[1] * y_angle;
 
