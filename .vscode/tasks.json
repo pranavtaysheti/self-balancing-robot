@@ -10,6 +10,26 @@
 				"isDefault": true
 			},
 			"problemMatcher": []
-		}
+		},
+		{
+			"label": "upload",
+			"type": "shell",
+			"command": "just upload",
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "build all",
+			"type": "shell",
+			"command": "just build-all",
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
 	]
 }
