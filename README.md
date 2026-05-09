@@ -5,11 +5,14 @@ WIP
 ## Credits
 
 1. Kalman Filters
-	- My implementation is based on famous implementation by [TKJElectronics](https://github.com/TKJElectronics/KalmanFilter)
+    - My implementation is based on famous implementation by [TKJElectronics](https://github.com/TKJElectronics/KalmanFilter)
 
-2. MPU6050 IMU Driver 
-	- I stole [jrowberg](https://github.com/jrowberg) 's driver for i2c communication with MPU6050 called [i2cdevlib](https://github.com/jrowberg/i2cdevlib)
-		
+2. MPU6050 IMU Driver
+    - I stole [jrowberg](https://github.com/jrowberg) 's driver for i2c communication with MPU6050 called [i2cdevlib](https://github.com/jrowberg/i2cdevlib)
+
+3. Johnson Motor CAD Model
+    - from [GrabCAD](https://grabcad.com/library/johnson-geared-high-torque-dc-motor-1) by Thilak VS
+
 ## License
 
 Mozilla Public License 2.0
